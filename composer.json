@@ -1,0 +1,27 @@
+{
+    "name": "ircmaxell/php-optimizer",
+    "description": "A CFG Optimizer for PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anthony Ferrara",
+            "email": "ircmaxell@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "ircmaxell/php-cfg": "dev-master",
+        "ircmaxell/php-types": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7",
+        "fabpot/php-cs-fixer": "1.*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "PHPOptimizer\\": "lib/PHPOptimizer/"
+        }
+    }
+
+}

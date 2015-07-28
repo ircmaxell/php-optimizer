@@ -1,0 +1,7 @@
+<?php
+$a = 1;
+return $a;
+-----
+Block#1
+    Terminal_Return
+        expr: LITERAL<int>(1)
