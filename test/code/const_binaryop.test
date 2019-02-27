@@ -3,4 +3,4 @@ return 1 + 2;
 -----
 Block#1
     Terminal_Return
-        expr: LITERAL<int>(3)
+        expr: LITERAL<inferred:int>(3)

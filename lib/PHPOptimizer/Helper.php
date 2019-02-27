@@ -1,7 +1,9 @@
 <?php
 
-/*
- * This file is part of PHP-Optimizer, a PHP CFG Optimizerf or PHP code
+declare(strict_types=1);
+
+/**
+ * This file is part of PHP-Optimizer, a PHP CFG Optimizer for PHP code
  *
  * @copyright 2015 Anthony Ferrara. All rights reserved
  * @license MIT See LICENSE at the root of the project for more info
@@ -12,14 +14,15 @@ namespace PHPOptimizer;
 use PHPCfg\Op;
 use PHPCfg\Operand;
 
-abstract class Helper {
-    
-    public static function replaceVar(Operand $from, Operand $to) {
+abstract class Helper
+{
+    public static function replaceVar(Operand $from, Operand $to)
+    {
         foreach ($from->usages as $usage) {
             foreach ($usage->getVariableNames() as $varName) {
-                $vars = $usage->$varName;
+                $vars = $usage->{$varName};
                 $newVars = [];
-                if (!is_array($vars)) {
+                if (! is_array($vars)) {
                     $vars = [$vars];
                 }
                 foreach ($vars as $key => $value) {
@@ -31,20 +34,21 @@ abstract class Helper {
                     }
                 }
 
-                if (!is_array($usage->$varName)) {
-                    $usage->$varName = array_shift($newVars);
+                if (! is_array($usage->{$varName})) {
+                    $usage->{$varName} = array_shift($newVars);
                 } else {
-                    $usage->$varName = $newVars;
+                    $usage->{$varName} = $newVars;
                 }
             }
         }
     }
 
-    public static function removeUsage(Operand $var, Op $op) {
+    public static function removeUsage(Operand $var, Op $op)
+    {
         foreach ($op->getVariableNames() as $varName) {
-            $vars = $op->$varName;
+            $vars = $op->{$varName};
             $newVars = [];
-            if (!is_array($vars)) {
+            if (! is_array($vars)) {
                 $vars = [$vars];
             }
             foreach ($vars as $key => $value) {
@@ -53,10 +57,10 @@ abstract class Helper {
                 }
             }
 
-            if (!is_array($op->$varName)) {
-                $op->$varName = array_shift($newVars);
+            if (! is_array($op->{$varName})) {
+                $op->{$varName} = array_shift($newVars);
             } else {
-                $op->$varName = array_keys($newVars);
+                $op->{$varName} = array_keys($newVars);
             }
         }
     }

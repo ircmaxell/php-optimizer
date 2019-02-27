@@ -1,7 +1,9 @@
 <?php
 
-/*
- * This file is part of PHP-Optimizer, a PHP CFG Optimizerf or PHP code
+declare(strict_types=1);
+
+/**
+ * This file is part of PHP-Optimizer, a PHP CFG Optimizer for PHP code
  *
  * @copyright 2015 Anthony Ferrara. All rights reserved
  * @license MIT See LICENSE at the root of the project for more info
@@ -9,25 +11,15 @@
 
 namespace PHPOptimizer\Visitor;
 
+use PHPCfg\AbstractVisitor;
 use PHPCfg\Block;
 use PHPCfg\Op;
-use PHPCfg\Visitor;
-use PHPTypes\Type;
 
-class JumpBlockEliminator implements Visitor {
-    
-    public function beforeTraverse(Block $block) {}
-
-    public function afterTraverse(Block $block) {}
-    
-    public function enterBlock(Block $block, Block $prior = null) {}
-
-    public function enterOp(Op $op, Block $block) {}
-
-    public function leaveOp(Op $op, Block $block) {}
-
-    public function leaveBlock(Block $block, Block $prior = null) {
-        if (count($block->children) !== 1 || !$block->children[0] instanceof Op\Stmt\Jump) {
+class JumpBlockEliminator extends AbstractVisitor
+{
+    public function leaveBlock(Block $block, Block $prior = null)
+    {
+        if (count($block->children) !== 1 || ! $block->children[0] instanceof Op\Stmt\Jump) {
             return;
         }
         $originalJump = $block->children[0];
@@ -46,7 +38,7 @@ class JumpBlockEliminator implements Visitor {
                 // TODO: optimize switches
                 return;
             } else {
-                throw new \RuntimeException("Unknown parent jump type: " . get_class($jump));
+                throw new \RuntimeException('Unknown parent jump type: '.get_class($jump));
             }
             $this->addParent($originalJump->target, $parent);
         }
@@ -69,23 +61,27 @@ class JumpBlockEliminator implements Visitor {
         }
 
         $this->removeParent($originalJump->target, $block);
+
         return $originalJump->target;
     }
 
-    public function skipBlock(Block $block, Block $prior = null) {}
+    public function skipBlock(Block $block, Block $prior = null)
+    {
+    }
 
-    protected function addParent(Block $block, Block $parent) {
-        if (!in_array($parent, $block->parents, true)) {
+    protected function addParent(Block $block, Block $parent)
+    {
+        if (! in_array($parent, $block->parents, true)) {
             $block->parents[] = $parent;
         }
     }
 
-    protected function removeParent(Block $block, Block $parent) {
+    protected function removeParent(Block $block, Block $parent)
+    {
         $k = array_search($parent, $block->parents, true);
         if ($k !== false) {
             unset($block->parents[$k]);
             $block->parents = array_values($block->parents);
         }
     }
-
 }
